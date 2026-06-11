@@ -1,0 +1,417 @@
+Program 1: Write a Simple Java Program, Build Docker Image, Push Code to GitHub and DockerHub (Linux)
+Aim
+
+Create a simple Java program, run it, create a Docker image, push the source code to GitHub, and push the Docker image to DockerHub.
+
+Step 1: Create a Project Folder
+
+Open Terminal and run:
+
+mkdir JavaDockerDemo
+cd JavaDockerDemo
+Check Current Directory
+pwd
+
+Expected output:
+
+/home/username/JavaDockerDemo
+Step 2: Create Java Program
+
+Create file:
+
+nano HelloWorld.java
+
+Paste:
+
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello DevOps Lab");
+    }
+}
+
+Save:
+
+Ctrl + O
+Enter
+Ctrl + X
+Check File
+ls
+
+Output:
+
+HelloWorld.java
+Step 3: Compile Java Program
+
+Compile:
+
+javac HelloWorld.java
+Check Generated File
+ls
+
+Output:
+
+HelloWorld.class
+HelloWorld.java
+Error 1: Java Not Installed
+
+Error:
+
+javac: command not found
+Fix
+
+Check Java:
+
+java --version
+javac --version
+
+Install Java:
+
+Ubuntu:
+
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+
+Verify:
+
+java --version
+javac --version
+Step 4: Run Java Program
+
+Run:
+
+java HelloWorld
+Output
+Hello DevOps Lab
+
+This confirms the Java program is working.
+
+Step 5: Create Dockerfile
+
+Create Dockerfile:
+
+nano Dockerfile
+
+Paste:
+
+FROM openjdk:17
+
+WORKDIR /app
+
+COPY . .
+
+RUN javac HelloWorld.java
+
+CMD ["java","HelloWorld"]
+
+Save:
+
+Ctrl + O
+Enter
+Ctrl + X
+
+Check files:
+
+ls
+
+Output:
+
+Dockerfile
+HelloWorld.class
+HelloWorld.java
+Step 6: Check Docker Installation
+docker --version
+
+Output example:
+
+Docker version 28.x.x
+Error 2: Docker Not Installed
+
+Error:
+
+docker: command not found
+Fix
+
+Install Docker:
+
+sudo apt update
+sudo apt install docker.io -y
+
+Start Docker:
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+Check:
+
+docker --version
+Error 3: Permission Denied
+
+Error:
+
+permission denied while trying to connect to Docker daemon
+Fix
+
+Run:
+
+sudo usermod -aG docker $USER
+
+Logout and login again.
+
+Verify:
+
+docker ps
+Step 7: Build Docker Image
+
+Build image:
+
+docker build -t java-demo .
+Successful Output
+
+Last line will look similar to:
+
+Successfully tagged java-demo:latest
+Step 8: Check Created Image
+docker images
+
+Output:
+
+REPOSITORY   TAG       IMAGE ID
+java-demo    latest    xxxxxxxx
+Error 4: Docker Daemon Not Running
+
+Error:
+
+Cannot connect to the Docker daemon
+Fix
+
+Start Docker:
+
+sudo systemctl start docker
+
+Verify:
+
+docker ps
+
+Then rebuild:
+
+docker build -t java-demo .
+Step 9: Run Docker Container
+
+Run:
+
+docker run java-demo
+Output
+Hello DevOps Lab
+
+This output comes from inside the Docker container.
+
+Step 10: Create Git Repository
+
+Initialize Git:
+
+git init
+
+Output:
+
+Initialized empty Git repository
+Step 11: Check Git Installation
+git --version
+
+Output:
+
+git version 2.x.x
+Error 5: Git Not Installed
+
+Install Git:
+
+sudo apt update
+sudo apt install git -y
+
+Verify:
+
+git --version
+Step 12: Add Files
+git add .
+
+Check status:
+
+git status
+
+Output:
+
+Changes to be committed
+Step 13: Commit Files
+git commit -m "Initial Commit"
+Error 6: Author Identity Unknown
+
+Error:
+
+Author identity unknown
+Fix
+
+Replace with your GitHub email:
+
+git config --global user.name "rashmitaa21"
+git config --global user.email "your_email@gmail.com"
+
+Commit again:
+
+git commit -m "Initial Commit"
+Step 14: Create GitHub Repository
+
+Go to GitHub.
+
+Repository Name:
+
+JavaDockerDemo
+
+Click:
+
+New Repository → Create Repository
+
+Do NOT add README.
+
+Step 15: Connect Local Repository to GitHub
+git branch -M main
+git remote add origin https://github.com/rashmitaa21/JavaDockerDemo.git
+
+Verify:
+
+git remote -v
+
+Output:
+
+origin https://github.com/rashmitaa21/JavaDockerDemo.git
+Error 7: Remote Already Exists
+
+Error:
+
+remote origin already exists
+Fix
+git remote remove origin
+
+Add again:
+
+git remote add origin https://github.com/rashmitaa21/JavaDockerDemo.git
+Step 16: Push Code to GitHub
+git push -u origin main
+
+Successful output:
+
+Branch 'main' set up to track remote branch 'main'
+Error 8: Authentication Failed
+
+Error:
+
+Authentication failed
+Fix
+
+Login through browser when prompted or use GitHub Personal Access Token.
+
+Retry:
+
+git push -u origin main
+Step 17: Login to DockerHub
+docker login
+
+Enter:
+
+Username: rashmitaa21
+Password: ********
+
+Success:
+
+Login Succeeded
+Error 9: Unauthorized
+
+Error:
+
+unauthorized: incorrect username or password
+Fix
+
+Logout:
+
+docker logout
+
+Login again:
+
+docker login
+Step 18: Tag Docker Image
+docker tag java-demo rashmitaa21/java-demo:v1
+
+Check:
+
+docker images
+
+Output:
+
+rashmitaa21/java-demo    v1
+java-demo                latest
+Step 19: Push Docker Image to DockerHub
+docker push rashmitaa21/java-demo:v1
+
+Successful output:
+
+latest: digest: sha256:...
+Error 10: Access Denied
+
+Error:
+
+denied: requested access to the resource is denied
+Fix
+
+Check login:
+
+docker login
+
+Tag image again:
+
+docker tag java-demo rashmitaa21/java-demo:v1
+
+Push again:
+
+docker push rashmitaa21/java-demo:v1
+How to Verify Everything Worked
+Verify Java Program
+java HelloWorld
+
+Output:
+
+Hello DevOps Lab
+Verify Docker Image
+docker images
+
+You should see:
+
+java-demo
+rashmitaa21/java-demo
+Verify DockerHub Upload
+
+Go to your DockerHub account and check if:
+
+java-demo
+
+repository exists.
+
+Verify GitHub Upload
+
+Open:
+
+https://github.com/rashmitaa21/JavaDockerDemo
+
+You should see:
+
+HelloWorld.java
+Dockerfile
+
+uploaded successfully.
+
+Final Output in Lab
+
+When the examiner asks for output, run:
+
+docker run java-demo
+
+Output:
+
+Hello DevOps Lab
